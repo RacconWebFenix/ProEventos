@@ -12,10 +12,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ProEventos.Application;
+using ProEventos.Application.Contratos;
 using ProEventos.Persistence;
 
 
-namespace ProEventos.API
+
+namespace ProEventosAPI
 {
     public class Startup
     {
@@ -24,15 +27,23 @@ namespace ProEventos.API
             Configuration = configuration;
         }
 
+
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ProEventosContext>(
-                context => context.UseSqlServer(Configuration.GetConnectionString("Default"))
+            IServiceCollection serviceCollection = services.AddDbContext<ProEventosContext>(
+                context => context.UseSqlServer(Configuration.GetConnectionString("Default"), s => s.MigrationsAssembly("ProEventosAPI"))
             );
-            services.AddControllers();
+            
+            services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddScoped<IEventoService, EventoService>();
+            services.AddScoped<IGeralPersist, GeralPersist>();
+            services.AddScoped<IEventoPersist, EventoPersist>();
+
             services.AddCors();
             services.AddSwaggerGen(c =>
 {

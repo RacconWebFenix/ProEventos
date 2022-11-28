@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ProEventos.Persistence;
+using ProEventosAPI;
 
 #nullable disable
 
-namespace ProEventos.Persistence.Migrations
+namespace ProEventosAPI.Migrations
 {
     [DbContext(typeof(ProEventosContext))]
     partial class ProEventosContextModelSnapshot : ModelSnapshot
@@ -45,10 +45,6 @@ namespace ProEventos.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Lote")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("QtdPessoas")
                         .HasColumnType("int");
 
@@ -79,7 +75,7 @@ namespace ProEventos.Persistence.Migrations
                     b.Property<DateTime?>("DataInicio")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("EventoId")
+                    b.Property<int?>("EventoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Nome")
@@ -180,13 +176,9 @@ namespace ProEventos.Persistence.Migrations
 
             modelBuilder.Entity("ProEventos.Domain.Lote", b =>
                 {
-                    b.HasOne("ProEventos.Domain.Evento", "Evento")
+                    b.HasOne("ProEventos.Domain.Evento", null)
                         .WithMany("Lotes")
-                        .HasForeignKey("EventoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Evento");
+                        .HasForeignKey("EventoId");
                 });
 
             modelBuilder.Entity("ProEventos.Domain.PalestranteEvento", b =>
@@ -210,17 +202,13 @@ namespace ProEventos.Persistence.Migrations
 
             modelBuilder.Entity("ProEventos.Domain.RedeSocial", b =>
                 {
-                    b.HasOne("ProEventos.Domain.Evento", "Evento")
+                    b.HasOne("ProEventos.Domain.Evento", null)
                         .WithMany("RedesSociais")
                         .HasForeignKey("EventoId");
 
-                    b.HasOne("ProEventos.Domain.Palestrante", "Palestrante")
+                    b.HasOne("ProEventos.Domain.Palestrante", null)
                         .WithMany("RedesSociais")
                         .HasForeignKey("PalestranteId");
-
-                    b.Navigation("Evento");
-
-                    b.Navigation("Palestrante");
                 });
 
             modelBuilder.Entity("ProEventos.Domain.Evento", b =>

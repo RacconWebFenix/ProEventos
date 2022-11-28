@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+
 using Microsoft.EntityFrameworkCore;
 using ProEventos.Domain;
 
-
-namespace ProEventos.Persistence
+namespace ProEventosAPI
 {
     public class ProEventosContext : DbContext
     {
@@ -21,7 +18,13 @@ namespace ProEventos.Persistence
         {
             modelBuilder.Entity<PalestranteEvento>()
             .HasKey(pe => new { pe.EventoId, pe.PalestranteId });
-        }
 
+
+            modelBuilder.Entity<Evento>().HasMany<Lote>(s => s.Lotes).WithOne().OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Evento>().HasMany<RedeSocial>(rs => rs.RedesSociais).WithOne().OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Palestrante>().HasMany<RedeSocial>(rs => rs.RedesSociais).WithOne().OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

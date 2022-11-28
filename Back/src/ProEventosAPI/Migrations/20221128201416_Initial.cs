@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace ProEventos.Persistence.Migrations
+namespace ProEventosAPI.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -21,7 +21,6 @@ namespace ProEventos.Persistence.Migrations
                     DataEvento = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Tema = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     QtdPessoas = table.Column<int>(type: "int", nullable: false),
-                    Lote = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImagemURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Telefone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -59,7 +58,7 @@ namespace ProEventos.Persistence.Migrations
                     DataInicio = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DataFim = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Quantidade = table.Column<int>(type: "int", nullable: false),
-                    EventoId = table.Column<int>(type: "int", nullable: false)
+                    EventoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -68,8 +67,7 @@ namespace ProEventos.Persistence.Migrations
                         name: "FK_Lotes_Eventos_EventoId",
                         column: x => x.EventoId,
                         principalTable: "Eventos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
