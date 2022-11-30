@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Evento } from '../models/Evento';
+import { EventoService } from '../services/evento.service';
 
 @Component({
   selector: 'app-eventos',
@@ -7,26 +8,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./eventos.component.scss'],
 })
 export class EventosComponent implements OnInit {
-  public eventos: any = [];
-  public filtredEvents: any = [];
+  public eventos: Evento[] = [];
+  public filtredEvents: Evento[] = [];
 
-  widthImg = 150;
-  marginImg = 5;
-  showImage = true;
-  private _filterList: string = '';
+  public widthImg = 150;
+  public marginImg = 5;
+  public showImage = true;
+  private filteredList: string = '';
 
   public get filterList() {
-    return this._filterList;
+    return this.filteredList;
   }
 
   public set filterList(value: string) {
-    this._filterList = value;
+    this.filteredList = value;
     this.filtredEvents = this.filterList
       ? this.filterEvents(this.filterList)
       : this.eventos;
   }
 
-  filterEvents(filterEvents: string): any {
+  public filterEvents(filterEvents: string): Evento[] {
     filterEvents.toLocaleLowerCase();
     return this.eventos.filter(
       (e: { tema: string; local: string }) =>
@@ -35,24 +36,23 @@ export class EventosComponent implements OnInit {
     );
   }
 
-  constructor(private http: HttpClient) {}
+  constructor(private eventoService: EventoService) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getEventos();
   }
 
-  toggleImage() {
+  toggleImage(): void {
     this.showImage = !this.showImage;
   }
 
   public getEventos(): void {
-    this.http.get('https://localhost:7134/api/eventos').subscribe(
-      (res) => {
+    this.eventoService.getEventos().subscribe({
+      next: (res: Evento[]) => {
         this.eventos = res;
         this.filtredEvents = this.eventos;
       },
-
-      (err) => console.log(err)
-    );
+      error: (err) => console.log(err),
+    });
   }
 }
