@@ -19,6 +19,7 @@
           class="btn btn-outline-light btn-sm"
           (click)="toggleImage()"
         >
+          <i class="{{ !showImage ? 'fa fa-eye-slash' : 'fa fa-eye' }}"></i>
           {{ !showImage ? "Ocultar" : "Exibir" }}
         </button>
       </th>
@@ -46,12 +47,16 @@
       <td>{{ item.id }}</td>
       <td>{{ item.tema }}</td>
       <td>{{ item.local }}</td>
-      <td>{{ item.dataEvento }}</td>
+      <td>{{ item.dataEvento | DateFormatPipe }}</td>
       <td>{{ item.qtdPessoas }}</td>
       <td>{{ item.lotes[0].nome }}</td>
       <td>
-        <button type="button" class="btn btn-primary btn-sm m-2">Editar</button>
-        <button type="button" class="btn btn-danger btn-sm">Excluir</button>
+        <button type="button" class="btn btn-primary btn-sm m-2"  tooltip="Editar">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button type="button" class="btn btn-danger btn-sm" tooltip="Excluir">
+          <i class="fa fa-trash"></i>
+        </button>
       </td>
     </tr>
   </tbody>
